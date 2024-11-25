@@ -1,0 +1,2174 @@
+<html><head><base href="." />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Windows 11 Replica</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background-image: url('https://4kwallpapers.com/images/wallpapers/windows-11-windows-dark-mode-stock-official-3840x2400-5630.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Add a subtle overlay effect */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.02) 0%,
+        rgba(0, 0, 0, 0.05) 100%
+    );
+    pointer-events: none;
+}
+
+.desktop-icons {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 80px);
+    gap: 20px;
+    padding: 20px;
+}
+
+.desktop-icon {
+    width: 80px;
+    height: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+    background: transparent;
+}
+
+.desktop-icon:hover {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.desktop-icon:active {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(0.95);
+}
+
+.desktop-icon img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px;
+}
+
+.desktop-icon span {
+    color: white;
+    text-align: center;
+    font-size: 12px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+    -webkit-font-smoothing: antialiased;
+}
+
+.taskbar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+.start-button {
+    width: 44px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 6px;
+    margin: 0 2px;
+    position: relative;
+}
+
+.start-button img {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.2s;
+    filter: brightness(0.2);
+    object-fit: contain;
+    display: block;
+}
+
+.start-button:hover img {
+    transform: scale(1.1);
+    filter: brightness(0.4);
+}
+
+.search, .task-icon {
+    width: 44px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 4px;
+    margin: 0 2px;
+}
+
+.search:hover, .task-icon:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.search.active, .task-icon.active {
+    background: rgba(0, 0, 0, 0.08);
+    border-bottom: 2px solid #0078D4;
+}
+
+.task-icons {
+    display: flex;
+    gap: 2px;
+}
+
+/* Update the taskbar icons */
+.task-icon img {
+    width: 24px;
+    height: 24px;
+}
+
+/* New styles for app icons */
+.app-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.task-icon img {
+    width: 20px;
+    height: 20px;
+}
+
+/* Adding new styles for app windows */
+.app-window {
+    position: fixed;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    min-width: 800px;
+    min-height: 600px;
+    display: none;
+    animation: windowOpen 0.3s ease;
+    z-index: 1;
+}
+
+.window-header {
+    padding: 0 12px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 8px 8px 0 0;
+}
+
+.window-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.window-title img {
+    width: 20px;
+    height: 20px;
+}
+
+.window-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.window-button {
+    width: 46px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.window-button:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.close-button:hover {
+    background: #e81123;
+    color: white;
+}
+
+.window-content {
+    padding: 24px;
+    color: #333;
+    height: calc(100% - 48px);
+    overflow: auto;
+}
+
+.window-content h3 {
+    margin-bottom: 16px;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.window-content p {
+    margin: 8px 0;
+    color: #666;
+}
+
+@keyframes windowOpen {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.draggable {
+    position: absolute;
+    cursor: move;
+}
+
+.start-menu {
+    position: fixed;
+    bottom: 48px; /* Position above taskbar */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 550px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    border-radius: 8px;
+    padding: 20px;
+    max-height: 700px;
+    display: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    z-index: 9999;
+    animation: slideUp 0.2s ease-out;
+}
+
+.start-menu-header {
+    margin-bottom: 20px;
+}
+
+.start-menu-search {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 8px 12px;
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.start-menu-search:focus {
+    outline: 2px solid #0078D4;
+    border-color: transparent;
+}
+
+.start-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.start-menu-item {
+    width: 100%;
+    height: 100%;
+    padding: 12px 8px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.start-menu-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.start-menu-item img {
+    width: 32px;
+    height: 32px;
+}
+
+.start-menu-item span {
+    font-size: 12px;
+    text-align: center;
+    color: #333;
+}
+
+.pinned-apps-title {
+    color: #333;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    padding-left: 4px;
+}
+
+.recommended-section {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateX(-50%) translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+.search-menu {
+    position: fixed;
+    bottom: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 450px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    border-radius: 8px;
+    padding: 20px;
+    display: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    z-index: 9999;
+    animation: slideUp 0.2s ease-out;
+}
+
+.search-menu-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    font-size: 14px;
+    outline: none;
+}
+
+.search-menu-input:focus {
+    border-color: #0078D4;
+}
+
+.search-results {
+    margin-top: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.search-result-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.search-result-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.search-result-item img {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+}
+
+.search-result-item span {
+    color: #333;
+    font-size: 14px;
+}
+
+/* Add active styles for taskbar icons */
+.task-icon.active {
+    background: rgba(0, 0, 0, 0.08);
+    border-bottom: 2px solid #0078D4;
+}
+
+.rokko-icon {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    background: #4a90e2;
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+}
+
+.rokko-icon::before {
+    content: 'R';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Add to existing CSS */
+.error-window {
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.4) !important;
+    border: 2px solid #ff0000 !important;
+}
+
+.error-window .window-header {
+    background: #ff0000 !important;
+    color: white !important;
+}
+
+.error-window .window-content {
+    background: rgba(255, 255, 255, 0.95) !important;
+    padding: 20px !important;
+    text-align: center !important;
+}
+
+.error-window .window-content p {
+    color: #ff0000 !important;
+    font-weight: bold !important;
+    font-size: 16px !important;
+    margin-bottom: 15px !important;
+}
+
+.error-window button {
+    background: #ff0000 !important;
+    color: white !important;
+    border: none !important;
+    padding: 8px 20px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    font-weight: bold !important;
+    margin-top: 15px !important;
+}
+
+.error-window button:hover {
+    background: #cc0000 !important;
+}
+
+/* Add new virus-related styles */
+.virus-effect {
+    animation: virusGlitch 0.2s infinite;
+}
+
+@keyframes virusGlitch {
+    0% {
+        transform: translate(0);
+        filter: hue-rotate(0deg);
+    }
+    25% {
+        transform: translate(-5px, 5px);
+        filter: hue-rotate(90deg) contrast(150%);
+    }
+    50% {
+        transform: translate(5px, -5px);
+        filter: hue-rotate(180deg) invert(75%);
+    }
+    75% {
+        transform: translate(-3px, 3px);
+        filter: hue-rotate(270deg) saturate(200%);
+    }
+    100% {
+        transform: translate(0);
+        filter: hue-rotate(360deg);
+    }
+}
+
+.error-window {
+    animation: errorFloat 2s infinite;
+}
+
+@keyframes errorFloat {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-10px) rotate(2deg);
+    }
+}
+
+/* New extreme glitch animation */
+@keyframes extremeGlitch {
+    0% {
+        transform: translate(0) skew(0deg);
+        filter: invert(0) saturate(100%);
+    }
+    25% {
+        transform: translate(-100px, 50px) skew(45deg);
+        filter: invert(100%) saturate(300%) hue-rotate(180deg);
+    }
+    50% {
+        transform: translate(100px, -50px) skew(-45deg);
+        filter: invert(0) saturate(500%) contrast(200%);
+    }
+    75% {
+        transform: translate(-50px, -50px) skew(20deg);
+        filter: invert(100%) saturate(0%) brightness(200%);
+    }
+    100% {
+        transform: translate(0) skew(0deg);
+        filter: invert(0) saturate(100%);
+    }
+}
+
+/* Add new styles for Phase 3 */
+.phase-three {
+    animation: meltdown 2s infinite;
+}
+
+@keyframes meltdown {
+    0% { transform: perspective(500px) rotateX(0deg); }
+    50% { transform: perspective(500px) rotateX(180deg) scale(1.5); }
+    100% { transform: perspective(500px) rotateX(360deg); }
+}
+
+/* Add new Phase 4 animation styles */
+@keyframes phaseWarp {
+    0% {
+        transform: scale(1) rotate(0deg);
+        filter: hue-rotate(0deg) blur(0);
+    }
+    25% {
+        transform: scale(2) rotate(45deg);
+        filter: hue-rotate(180deg) blur(10px) contrast(200%);
+    }
+    50% {
+        transform: scale(0.5) rotate(-90deg);
+        filter: hue-rotate(90deg) blur(5px) invert(100%);
+    }
+    75% {
+        transform: scale(1.5) rotate(180deg);
+        filter: hue-rotate(270deg) blur(15px) saturate(300%);
+    }
+    100% {
+        transform: scale(1) rotate(360deg);
+        filter: hue-rotate(360deg) blur(0);
+    }
+}
+
+.phase-four {
+    animation: phaseWarp 0.3s infinite;
+}
+
+/* Add screen shake effect for Phase 4 */
+@keyframes screenShake {
+    0%, 100% { transform: translate(0); }
+    10% { transform: translate(-10px, -10px); }
+    30% { transform: translate(10px, 10px); }
+    50% { transform: translate(-10px, 10px); }
+    70% { transform: translate(10px, -10px); }
+    90% { transform: translate(-5px, 5px); }
+}
+
+.screen-shake {
+    animation: screenShake 0.1s infinite;
+}
+
+/* Add blue screen styles */
+.blue-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0078D7;
+    color: white;
+    padding: 50px;
+    font-family: "Segoe UI", sans-serif;
+    z-index: 99999;
+    display: none;
+}
+
+.blue-screen h1 {
+    font-size: 32px;
+    margin-bottom: 30px;
+}
+
+.blue-screen p {
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.blue-screen .error-code {
+    font-family: monospace;
+    margin-top: 40px;
+}
+
+.blue-screen .qr-code {
+    width: 100px;
+    height: 100px;
+    background: white;
+    margin-top: 40px;
+}
+
+/* Add to existing CSS */
+.file-explorer-container {
+    display: flex;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.file-explorer-sidebar {
+    width: 220px;
+    background: rgba(243, 243, 243, 0.8);
+    padding: 12px;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.file-explorer-sidebar .folder-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.file-explorer-sidebar .folder-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.file-explorer-sidebar .folder-item.active {
+    background: rgba(0, 120, 212, 0.1);
+}
+
+.file-explorer-sidebar .folder-item.active img {
+    opacity: 1;
+}
+
+.file-explorer-sidebar .folder-item img {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    opacity: 0.8;
+}
+
+.file-explorer-toolbar {
+    height: 48px;
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 12px;
+}
+
+.toolbar-button {
+    padding: 6px 12px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.toolbar-button:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.toolbar-button img {
+    width: 16px;
+    height: 16px;
+    opacity: 0.8;
+}
+
+.toolbar-button span {
+    font-size: 12px;
+    color: #333;
+}
+
+.address-bar {
+    height: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 8px;
+}
+
+.path-segment {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.path-segment:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.path-segment img {
+    width: 16px;
+    height: 16px;
+    opacity: 0.8;
+}
+
+.path-segment span {
+    font-size: 12px;
+    color: #333;
+}
+
+.chevron {
+    color: #666;
+    font-size: 12px;
+    margin: 0 2px;
+}
+
+.file-explorer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.file-explorer-content .folder-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.file-explorer-content .folder-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.file-explorer-content .folder-item img {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+}
+
+.file-explorer-content .folder-item span {
+    color: #333;
+    font-size: 13px;
+}
+
+.file-explorer-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+/* Add to the existing CSS */
+.file-explorer-content .folder-item.active {
+    background: rgba(0, 120, 212, 0.1);
+}
+
+.file-explorer-status {
+    height: 24px;
+    background: rgba(255, 255, 255, 0.95);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 4px 16px;
+    font-size: 12px;
+    color: #666;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(20px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(20px); }
+}
+
+/* Add these styles to your existing CSS */
+.context-menu-item {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #333;
+    transition: background-color 0.2s;
+}
+
+.context-menu-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.context-menu-item img {
+    width: 16px;
+    height: 16px;
+    opacity: 0.8;
+}
+
+/* Add to existing CSS */
+.blackjack-content {
+    background: #006400;
+    color: white;
+    padding: 20px;
+    height: 100%;
+}
+
+.blackjack-table {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%;
+}
+
+.dealer-hand, .player-hand {
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.cards-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.card {
+    width: 100px;
+    height: 140px;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    color: black;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    margin: 5px;
+}
+
+.card.red {
+    color: red;
+}
+
+.game-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.game-controls button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background: #ffd700;
+    color: black;
+    transition: all 0.3s;
+}
+
+.game-controls button:hover {
+    background: #ffed4a;
+}
+
+.game-controls button:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+}
+
+.game-status {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.bet-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+#bet-amount {
+    padding: 5px;
+    width: 100px;
+    border-radius: 5px;
+}
+
+#place-bet {
+    padding: 5px 15px;
+    background: #ffd700;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+    <div class="desktop-icons">
+        <div class="desktop-icon" onclick="openWindow('fileExplorer')">
+            <img src="https://win11.blueedge.me/img/icon/explorer.png" alt="File Explorer icon from Windows 11">
+            <span>File Explorer</span>
+        </div>
+        <div class="desktop-icon" onclick="openWindow('edge')">
+            <img src="https://win11.blueedge.me/img/icon/edge.png" alt="Microsoft Edge icon from Windows 11">
+            <span>Microsoft Edge</span>
+        </div>
+        <div class="desktop-icon" onclick="openWindow('powerpoint')">
+            <img src="https://win11.blueedge.me/img/icon/powerpoint.png" alt="Microsoft PowerPoint icon from Windows 11">
+            <span>PowerPoint</span>
+        </div>
+        <div class="desktop-icon" onclick="openWindow('recycleBin')">
+            <img src="https://win11.blueedge.me/img/icon/bin0.png" alt="Recycle Bin icon from Windows 11">
+            <span>Recycle Bin</span>
+        </div>
+        <div class="desktop-icon" onclick="openWindow('blackjack')">
+            <img src="https://win11.blueedge.me/img/icon/game.png" alt="Blackjack Game icon">
+            <span>Blackjack</span>
+        </div>
+    </div>
+
+    <div class="taskbar">
+        <div class="start-button" onclick="toggleStartMenu()">
+            <img src="https://win11.blueedge.me/img/icon/win11.png" alt="Windows Start Menu" width="24" height="24">
+        </div>
+        <div class="search">
+            <img src="https://win11.blueedge.me/img/icon/search.png" alt="Search" width="24" height="24">
+        </div>
+        <div class="task-icons">
+            <div class="task-icon" data-window="fileExplorer">
+                <img src="https://win11.blueedge.me/img/icon/explorer.png" alt="File Explorer">
+            </div>
+            <div class="task-icon" data-window="edge">
+                <img src="https://win11.blueedge.me/img/icon/edge.png" alt="Microsoft Edge">
+            </div>
+            <div class="task-icon" data-window="store">
+                <img src="https://win11.blueedge.me/img/icon/store.png" alt="Microsoft Store">
+            </div>
+            <div class="task-icon" data-window="spotify">
+                <img src="https://win11.blueedge.me/img/icon/spotify.png" alt="Spotify">
+            </div>
+            <div class="task-icon" data-window="mail">
+                <img src="https://win11.blueedge.me/img/icon/mail.png" alt="Mail">
+            </div>
+            <div class="task-icon" data-window="photos">
+                <img src="https://win11.blueedge.me/img/icon/photos.png" alt="Photos">
+            </div>
+            <div class="task-icon" data-window="blackjack">
+                <img src="https://win11.blueedge.me/img/icon/game.png" alt="Blackjack">
+            </div>
+        </div>
+    </div>
+
+    <div class="start-menu" id="startMenu">
+        <div class="start-menu-header">
+            <input type="text" class="start-menu-search" placeholder="Type here to search">
+        </div>
+        
+        <div class="pinned-apps-title">Pinned</div>
+        <div class="start-menu-grid">
+            <div class="start-menu-item">
+                <img src="https://win11.blueedge.me/img/icon/edge.png" alt="Edge">
+                <span>Edge</span>
+            </div>
+            <div class="start-menu-item">
+                <img src="https://win11.blueedge.me/img/icon/explorer.png" alt="File Explorer">
+                <span>File Explorer</span>
+            </div>
+            <div class="start-menu-item">
+                <img src="https://win11.blueedge.me/img/icon/store.png" alt="Store">
+                <span>Store</span>
+            </div>
+            <div class="start-menu-item">
+                <img src="https://win11.blueedge.me/img/icon/spotify.png" alt="Spotify">
+                <span>Spotify</span>
+            </div>
+            <div class="start-menu-item">
+                <img src="https://win11.blueedge.me/img/icon/mail.png" alt="Mail">
+                <span>Mail</span>
+            </div>
+            <div class="start-menu-item">
+                <img src="https://win11.blueedge.me/img/icon/photos.png" alt="Photos">
+                <span>Photos</span>
+            </div>
+        </div>
+        
+        <div class="recommended-section">
+            <div class="pinned-apps-title">Recommended</div>
+            <div class="start-menu-grid">
+                <div class="start-menu-item">
+                    <img src="https://win11.blueedge.me/img/icon/powerpoint.png" alt="Presentation">
+                    <span>Presentation.pptx</span>
+                </div>
+                <div class="start-menu-item">
+                    <img src="https://win11.blueedge.me/img/icon/photos.png" alt="Photos">
+                    <span>Vacation.jpg</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="search-menu" id="searchMenu">
+        <div class="search-menu-header">
+            <input type="text" class="search-menu-input" id="searchInput" placeholder="Type here to search">
+        </div>
+        <div class="search-results" id="searchResults">
+            <!-- Results will be populated dynamically -->
+        </div>
+    </div>
+
+    <div class="notification-center">
+        <!-- Notification center content -->
+    </div>
+
+    <div class="time-widget" onclick="toggleNotificationCenter()">
+        <span id="time">12:00 PM</span>
+    </div>
+
+    <div id="fileExplorer" class="app-window draggable" style="top: 60px; left: 60px;">
+        <div class="window-header">
+            <div class="window-title">
+                <img src="https://win11.blueedge.me/img/icon/explorer.png" alt="File Explorer icon">
+                <span>File Explorer</span>
+            </div>
+            <div class="window-controls">
+                <div class="window-button" onclick="minimizeWindow('fileExplorer')">─</div>
+                <div class="window-button" onclick="maximizeWindow('fileExplorer')">□</div>
+                <div class="window-button close-button" onclick="closeWindow('fileExplorer')">✕</div>
+            </div>
+        </div>
+        <div class="file-explorer-container">
+            <div class="file-explorer-sidebar">
+                <div class="folder-item active" onclick="updateFileExplorerContent('Home')">
+                    <img src="https://win11.blueedge.me/img/icon/home.png" alt="Home">
+                    <span>Home</span>
+                </div>
+                <div class="folder-item" onclick="updateFileExplorerContent('Desktop')">
+                    <img src="https://win11.blueedge.me/img/icon/desktop.png" alt="Desktop">
+                    <span>Desktop</span>
+                </div>
+                <div class="folder-item" onclick="updateFileExplorerContent('Downloads')"> 
+                    <img src="https://win11.blueedge.me/img/icon/downloads.png" alt="Downloads">
+                    <span>Downloads</span>
+                </div>
+                <div class="folder-item" onclick="updateFileExplorerContent('Documents')">
+                    <img src="https://win11.blueedge.me/img/icon/documents.png" alt="Documents">
+                    <span>Documents</span>
+                </div>
+                <div class="folder-item" onclick="updateFileExplorerContent('Pictures')">
+                    <img src="https://win11.blueedge.me/img/icon/pictures.png" alt="Pictures">
+                    <span>Pictures</span>
+                </div>
+                <div class="folder-item" onclick="updateFileExplorerContent('Music')">
+                    <img src="https://win11.blueedge.me/img/icon/music.png" alt="Music">
+                    <span>Music</span>
+                </div>
+                <div class="folder-item" onclick="updateFileExplorerContent('Videos')">
+                    <img src="https://win11.blueedge.me/img/icon/videos.png" alt="Videos">
+                    <span>Videos</span>
+                </div>
+            </div>
+            <div class="file-explorer-main">
+                <div class="file-explorer-toolbar">
+                    <div class="toolbar-button" onclick="createNewItem()">
+                        <img src="https://win11.blueedge.me/img/icon/new-folder.png" alt="New">
+                        <span>New</span>
+                    </div>
+                    <div class="toolbar-button">
+                        <img src="https://win11.blueedge.me/img/icon/cut.png" alt="Cut">
+                        <span>Cut</span>
+                    </div>
+                    <div class="toolbar-button">
+                        <img src="https://win11.blueedge.me/img/icon/copy.png" alt="Copy">
+                        <span>Copy</span>
+                    </div>
+                    <div class="toolbar-button">
+                        <img src="https://win11.blueedge.me/img/icon/paste.png" alt="Paste">
+                        <span>Paste</span>
+                    </div>
+                    <div class="toolbar-button">
+                        <img src="https://win11.blueedge.me/img/icon/rename.png" alt="Rename">
+                        <span>Rename</span>
+                    </div>
+                    <div class="toolbar-button">
+                        <img src="https://win11.blueedge.me/img/icon/share.png" alt="Share">
+                        <span>Share</span>
+                    </div>
+                    <div class="toolbar-button">
+                        <img src="https://win11.blueedge.me/img/icon/delete.png" alt="Delete">
+                        <span>Delete</span>
+                    </div>
+                    <div class="toolbar-button">
+                        <img src="https://win11.blueedge.me/img/icon/sort.png" alt="Sort">
+                        <span>Sort</span>
+                    </div>
+                    <div class="toolbar-button">
+                        <img src="https://win11.blueedge.me/img/icon/view.png" alt="View">
+                        <span>View</span>
+                    </div>
+                </div>
+                <div class="address-bar">
+                    <div class="path-segment">
+                        <img src="https://win11.blueedge.me/img/icon/pc.png" alt="This PC" width="16" height="16">
+                        <span>This PC</span>
+                    </div>
+                    <span class="chevron">›</span>
+                    <div class="path-segment">
+                        <img src="https://win11.blueedge.me/img/icon/documents.png" alt="Documents" width="16" height="16">
+                        <span>Documents</span>
+                    </div>
+                </div>
+                <div class="file-explorer-content">
+                    <div class="folder-item">
+                        <img src="https://win11.blueedge.me/img/icon/folder.png" alt="Folder icon">
+                        <span>My Projects</span>
+                    </div>
+                    <div class="folder-item">
+                        <img src="https://win11.blueedge.me/img/icon/folder.png" alt="Folder icon">
+                        <span>Work Files</span>
+                    </div>
+                    <div class="folder-item">
+                        <img src="https://win11.blueedge.me/img/icon/txt.png" alt="Text file icon">
+                        <span>Notes.txt</span>
+                    </div>
+                    <div class="folder-item">
+                        <img src="https://win11.blueedge.me/img/icon/pdf.png" alt="PDF file icon">
+                        <span>Report.pdf</span>
+                    </div>
+                    <div class="folder-item">
+                        <img src="https://win11.blueedge.me/img/icon/word.png" alt="Word document icon">
+                        <span>Document.docx</span>
+                    </div>
+                    <div class="folder-item">
+                        <img src="https://win11.blueedge.me/img/icon/excel.png" alt="Excel file icon">
+                        <span>Spreadsheet.xlsx</span>
+                    </div>
+                    <div class="folder-item">
+                        <img src="https://win11.blueedge.me/img/icon/pptx.png" alt="PowerPoint icon">
+                        <span>Presentation.pptx</span>
+                    </div>
+                    <div class="folder-item">
+                        <img src="https://win11.blueedge.me/img/icon/image.png" alt="Image file icon">
+                        <span>Photo.jpg</span>
+                    </div>
+                    <div class="folder-item">
+                        <img src="https://win11.blueedge.me/img/icon/zip.png" alt="ZIP file icon">
+                        <span>Archive.zip</span>
+                    </div>
+                    <div class="folder-item">
+                        <img src="https://win11.blueedge.me/img/icon/music.png" alt="Audio file icon">
+                        <span>Music.mp3</span>
+                    </div>
+                    <div class="folder-item">
+                        <img src="https://win11.blueedge.me/img/icon/video.png" alt="Video file icon">
+                        <span>Video.mp4</span>
+                    </div>
+                    <div class="folder-item">
+                        <img src="https://win11.blueedge.me/img/icon/code.png" alt="Code file icon">
+                        <span>script.js</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="edge" class="app-window draggable" style="top: 70px; left: 70px;">
+        <div class="window-header">
+            <div class="window-title">
+                <img src="https://win11.blueedge.me/img/icon/edge.png" alt="Microsoft Edge icon">
+                <span>Microsoft Edge</span>
+            </div>
+            <div class="window-controls">
+                <div class="window-button" onclick="minimizeWindow('edge')">─</div>
+                <div class="window-button" onclick="maximizeWindow('edge')">□</div>
+                <div class="window-button close-button" onclick="closeWindow('edge')">✕</div>
+            </div>
+        </div>
+        <div class="edge-container">
+            <div class="edge-toolbar">
+                <div class="edge-nav-buttons">
+                    <button class="edge-button"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M10 2L4 8l6 6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+                    <button class="edge-button"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M6 2l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+                    <button class="edge-button"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M2 8h12M8 2v12" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+                </div>
+                <div class="edge-address-bar">
+                    <div class="edge-security-icon">
+                        <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1L2 3v5c0 4.19 2.87 7.19 6 8 3.13-.81 6-3.81 6-8V3L8 1z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+                    </div>
+                    <input type="text" value="https://www.microsoft.com" class="edge-url-input">
+                    <div class="edge-actions">
+                        <button class="edge-button"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M7 2a5 5 0 100 10A5 5 0 007 2zm5 11l-2-2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+                        <button class="edge-button"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M2 8s3-5 7-5 5 5 5 5-1 5-5 5-7-5-7-5z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+                    </div>
+                </div>
+                <div class="edge-actions-right">
+                    <button class="edge-button"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M4 4h8v8H4z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+                    <button class="edge-button"><svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="1.5" fill="currentColor"/><circle cx="4" cy="8" r="1.5" fill="currentColor"/><circle cx="12" cy="8" r="1.5" fill="currentColor"/></svg></button>
+                </div>
+            </div>
+            <div class="edge-tabs">
+                <div class="edge-tab active">
+                    <img src="https://www.microsoft.com/favicon.ico" alt="Microsoft" width="16" height="16">
+                    <span>Microsoft - Official Home Page</span>
+                    <button class="edge-tab-close">×</button>
+                </div>
+                <div class="edge-new-tab">
+                    <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="1.5"/></svg>
+                </div>
+            </div>
+            <div class="edge-content">
+                <div class="edge-home">
+                    <div class="edge-search">
+                        <input type="text" placeholder="Search the web">
+                    </div>
+                    <div class="edge-quick-links">
+                        <div class="edge-quick-link">
+                            <img src="https://www.microsoft.com/favicon.ico" alt="Microsoft">
+                            <span>Microsoft</span>
+                        </div>
+                        <div class="edge-quick-link">
+                            <img src="https://www.office.com/favicon.ico" alt="Office">
+                            <span>Office</span>
+                        </div>
+                        <div class="edge-quick-link">
+                            <img src="https://www.bing.com/favicon.ico" alt="Bing">
+                            <span>Bing</span>
+                        </div>
+                        <div class="edge-quick-link">
+                            <img src="https://www.outlook.com/favicon.ico" alt="Outlook">
+                            <span>Outlook</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="powerpoint" class="app-window draggable" style="top: 90px; left: 90px;">
+        <div class="window-header">
+            <div class="window-title">
+                <img src="https://win11.blueedge.me/img/icon/powerpoint.png" alt="Microsoft PowerPoint icon">
+                <span>Microsoft PowerPoint</span>
+            </div>
+            <div class="window-controls">
+                <div class="window-button" onclick="minimizeWindow('powerpoint')">─</div>
+                <div class="window-button" onclick="maximizeWindow('powerpoint')">□</div>
+                <div class="window-button close-button" onclick="closeWindow('powerpoint')">✕</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <h3>Microsoft PowerPoint</h3>
+            <p>New Presentation</p>
+        </div>
+    </div>
+
+    <div id="recycleBin" class="app-window draggable" style="top: 100px; left: 100px;">
+        <div class="window-header">
+            <div class="window-title">
+                <img src="https://win11.blueedge.me/img/icon/bin0.png" alt="Recycle Bin icon">
+                <span>Recycle Bin</span>
+            </div>
+            <div class="window-controls">
+                <div class="window-button" onclick="minimizeWindow('recycleBin')">─</div>
+                <div class="window-button" onclick="maximizeWindow('recycleBin')">□</div>
+                <div class="window-button close-button" onclick="closeWindow('recycleBin')">✕</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <div class="file-explorer-container">
+                <div class="file-explorer-sidebar">
+                    <div class="folder-item active">
+                        <img src="https://win11.blueedge.me/img/icon/bin0.png" alt="Recycle Bin">
+                        <span>Recycle Bin</span>
+                    </div>
+                </div>
+                <div class="file-explorer-main">
+                    <div class="file-explorer-toolbar">
+                        <div class="toolbar-button">
+                            <img src="https://win11.blueedge.me/img/icon/restore.png" alt="Restore">
+                            <span>Restore</span>
+                        </div>
+                        <div class="toolbar-button">
+                            <img src="https://win11.blueedge.me/img/icon/delete.png" alt="Delete">
+                            <span>Delete</span>
+                        </div>
+                        <div class="toolbar-button">
+                            <img src="https://win11.blueedge.me/img/icon/empty-bin.png" alt="Empty">
+                            <span>Empty Recycle Bin</span>
+                        </div>
+                    </div>
+                    <div class="address-bar">
+                        <div class="path-segment">
+                            <img src="https://win11.blueedge.me/img/icon/bin0.png" alt="Recycle Bin">
+                            <span>Recycle Bin</span>
+                        </div>
+                    </div>
+                    <div class="file-explorer-content recycling-bin-content">
+                        <div class="empty-bin-message">
+                            <img src="https://win11.blueedge.me/img/icon/bin0.png" alt="Empty Recycle Bin" style="width: 64px; height: 64px; opacity: 0.5; margin-bottom: 16px;">
+                            <p style="color: #666; font-size: 14px;">Recycle Bin is empty</p>
+                        </div>
+                    </div>
+                    <div class="file-explorer-status">
+                        0 items
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="store" class="app-window draggable" style="top: 110px; left: 110px;">
+        <div class="window-header">
+            <div class="window-title">
+                <img src="https://win11.blueedge.me/img/icon/store.png" alt="Microsoft Store icon">
+                <span>Microsoft Store</span>
+            </div>
+            <div class="window-controls">
+                <div class="window-button" onclick="minimizeWindow('store')">─</div>
+                <div class="window-button" onclick="maximizeWindow('store')">□</div>
+                <div class="window-button close-button" onclick="closeWindow('store')">✕</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <h3>Microsoft Store</h3>
+            <p>Welcome to Microsoft Store</p>
+        </div>
+    </div>
+
+    <div id="spotify" class="app-window draggable" style="top: 120px; left: 120px;">
+        <div class="window-header">
+            <div class="window-title">
+                <img src="https://win11.blueedge.me/img/icon/spotify.png" alt="Spotify icon">
+                <span>Spotify</span>
+            </div>
+            <div class="window-controls">
+                <div class="window-button" onclick="minimizeWindow('spotify')">─</div>
+                <div class="window-button" onclick="maximizeWindow('spotify')">□</div>
+                <div class="window-button close-button" onclick="closeWindow('spotify')">✕</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <h3>Spotify</h3>
+            <p>Music for everyone</p>
+        </div>
+    </div>
+
+    <div id="mail" class="app-window draggable" style="top: 130px; left: 130px;">
+        <div class="window-header">
+            <div class="window-title">
+                <img src="https://win11.blueedge.me/img/icon/mail.png" alt="Mail icon">
+                <span>Mail</span>
+            </div>
+            <div class="window-controls">
+                <div class="window-button" onclick="minimizeWindow('mail')">─</div>
+                <div class="window-button" onclick="maximizeWindow('mail')">□</div>
+                <div class="window-button close-button" onclick="closeWindow('mail')">✕</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <h3>Mail</h3>
+            <p>Check your email</p>
+        </div>
+    </div>
+
+    <div id="photos" class="app-window draggable" style="top: 140px; left: 140px;">
+        <div class="window-header">
+            <div class="window-title">
+                <img src="https://win11.blueedge.me/img/icon/photos.png" alt="Photos icon">
+                <span>Photos</span>
+            </div>
+            <div class="window-controls">
+                <div class="window-button" onclick="minimizeWindow('photos')">─</div>
+                <div class="window-button" onclick="maximizeWindow('photos')">□</div>
+                <div class="window-button close-button" onclick="closeWindow('photos')">✕</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <h3>Photos</h3>
+            <p>View and organize your photos</p>
+        </div>
+    </div>
+
+    <div id="blackjack" class="app-window draggable" style="top: 50px; left: 50px;">
+        <div class="window-header">
+            <div class="window-title">
+                <img src="https://win11.blueedge.me/img/icon/game.png" alt="Blackjack Game icon">
+                <span>Blackjack</span>
+            </div>
+            <div class="window-controls">
+                <div class="window-button" onclick="minimizeWindow('blackjack')">─</div>
+                <div class="window-button" onclick="maximizeWindow('blackjack')">□</div>
+                <div class="window-button close-button" onclick="closeWindow('blackjack')">✕</div>
+            </div>
+        </div>
+        <div class="window-content blackjack-content">
+            <div class="blackjack-table">
+                <div class="dealer-hand">
+                    <h3>Dealer's Hand: <span id="dealer-sum">0</span></h3>
+                    <div id="dealer-cards"></div>
+                </div>
+                <div class="player-hand">
+                    <h3>Your Hand: <span id="player-sum">0</span></h3>
+                    <div id="player-cards"></div>
+                </div>
+                <div class="game-controls">
+                    <button id="deal-button" onclick="startGame()">Deal Cards</button>
+                    <button id="hit-button" onclick="hit()" disabled>Hit</button>
+                    <button id="stand-button" onclick="stand()" disabled>Stand</button>
+                </div>
+                <div class="game-status">
+                    <p id="status-message"></p>
+                    <p>Money: $<span id="player-money">1000</span></p>
+                    <div class="bet-controls">
+                        <input type="number" id="bet-amount" min="10" max="1000" value="10" step="10">
+                        <button id="place-bet" onclick="placeBet()">Place Bet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+let recycleBinItems = [];
+let virusPhase = 0;
+let deck = [];
+let dealerSum = 0;
+let playerSum = 0;
+let dealerAceCount = 0;
+let playerAceCount = 0;
+let hidden;
+let playerMoney = 1000;
+let currentBet = 0;
+let canHit = false;
+
+function bringToFront(windowElement) {
+    const windows = document.querySelectorAll('.app-window');
+    let maxZ = Math.max(...Array.from(windows).map(w => 
+        parseInt(getComputedStyle(w).zIndex) || 0
+    ));
+    windowElement.style.zIndex = maxZ + 1;
+}
+
+function toggleStartMenu() {
+    const startMenu = document.getElementById('startMenu');
+    const isVisible = startMenu.style.display === 'block';
+    
+    if (isVisible) {
+        startMenu.style.display = 'none';
+    } else {
+        startMenu.style.display = 'block';
+        document.getElementById('searchMenu').style.display = 'none';
+    }
+}
+
+document.addEventListener('click', (e) => {
+    const startMenu = document.getElementById('startMenu');
+    const startButton = document.querySelector('.start-button');
+    
+    if (!startMenu.contains(e.target) && !startButton.contains(e.target)) {
+        startMenu.style.display = 'none';
+    }
+});
+
+document.querySelectorAll('.start-menu-item').forEach(item => {
+    item.addEventListener('click', () => {
+        const appName = item.querySelector('span').textContent.toLowerCase().replace(' ', '');
+        const mappings = {
+            'edge': 'edge',
+            'fileexplorer': 'fileExplorer',
+            'store': 'store',
+            'spotify': 'spotify',
+            'mail': 'mail',
+            'photos': 'photos'
+        };
+        
+        if (mappings[appName]) {
+            openWindow(mappings[appName]);
+            toggleStartMenu(); // Close start menu after opening app
+        }
+    });
+});
+
+function getIconUrl(iconType) {
+    const iconMap = {
+        'explorer': 'https://win11.blueedge.me/img/icon/explorer.png',
+        'edge': 'https://win11.blueedge.me/img/icon/edge.png',
+        'powerpoint': 'https://win11.blueedge.me/img/icon/powerpoint.png',
+        'bin0': 'https://win11.blueedge.me/img/icon/bin0.png',
+        'bin1': 'https://win11.blueedge.me/img/icon/bin1.png',
+        'store': 'https://win11.blueedge.me/img/icon/store.png',
+        'spotify': 'https://win11.blueedge.me/img/icon/spotify.png',
+        'mail': 'https://win11.blueedge.me/img/icon/mail.png',
+        'photos': 'https://win11.blueedge.me/img/icon/photos.png',
+        'folder': 'https://win11.blueedge.me/img/icon/folder.png',
+        'txt': 'https://win11.blueedge.me/img/icon/txt.png',
+        'pdf': 'https://win11.blueedge.me/img/icon/pdf.png',
+        'word': 'https://win11.blueedge.me/img/icon/word.png',
+        'excel': 'https://win11.blueedge.me/img/icon/excel.png',
+        'image': 'https://win11.blueedge.me/img/icon/image.png',
+        'video': 'https://win11.blueedge.me/img/icon/video.png',
+        'music': 'https://win11.blueedge.me/img/icon/music.png',
+        'zip': 'https://win11.blueedge.me/img/icon/zip.png',
+        'exe': 'https://win11.blueedge.me/img/icon/exe.png',
+        'code': 'https://win11.blueedge.me/img/icon/code.png',
+        'home': 'https://win11.blueedge.me/img/icon/home.png',
+        'desktop': 'https://win11.blueedge.me/img/icon/desktop.png',
+        'downloads': 'https://win11.blueedge.me/img/icon/downloads.png',
+        'documents': 'https://win11.blueedge.me/img/icon/documents.png',
+        'pictures': 'https://win11.blueedge.me/img/icon/pictures.png',
+        'search': 'https://win11.blueedge.me/img/icon/search.png',
+        'win11': 'https://win11.blueedge.me/img/icon/win11.png',
+        'game': 'https://win11.blueedge.me/img/icon/game.png'
+    };
+    
+    return iconMap[iconType] || iconMap['folder']; // Default to folder icon if type not found
+}
+
+// Update file explorer icon loading
+function updateFileExplorerContent(category) {
+    const contentArea = document.querySelector('.file-explorer-content');
+    const filesByCategory = {
+        'Home': [
+            { name: 'Quick Access', type: 'folder', icon: 'folder' },
+            { name: 'OneDrive', type: 'folder', icon: 'folder' },
+            { name: 'Recent Files', type: 'folder', icon: 'folder' }
+        ],
+        'Desktop': [
+            { name: 'File Explorer', type: 'application', icon: 'explorer' },
+            { name: 'Microsoft Edge', type: 'application', icon: 'edge' },
+            { name: 'PowerPoint', type: 'application', icon: 'powerpoint' },
+            { name: 'Recycle Bin', type: 'application', icon: 'bin0' }
+        ],
+        'Downloads': [
+            { name: 'setup.exe', type: 'executable', icon: 'exe' },
+            { name: 'report-2023.pdf', type: 'pdf', icon: 'pdf' },
+            { name: 'vacation.zip', type: 'archive', icon: 'zip' },
+            { name: 'software-installer.msi', type: 'installer', icon: 'exe' },
+            { name: 'photo-album.rar', type: 'archive', icon: 'zip' }
+        ],
+        'Documents': [
+            { name: 'Project Proposal', type: 'word', icon: 'word' },
+            { name: 'Budget 2023', type: 'excel', icon: 'excel' },
+            { name: 'Meeting Notes', type: 'txt', icon: 'txt' },
+            { name: 'Client Presentation', type: 'powerpoint', icon: 'pptx' },
+            { name: 'Research Papers', type: 'folder', icon: 'folder' }
+        ],
+        'Pictures': [
+            { name: 'Vacation 2023', type: 'folder', icon: 'folder' },
+            { name: 'Profile Picture.jpg', type: 'image', icon: 'image' },
+            { name: 'Screenshot 2023.png', type: 'image', icon: 'image' },
+            { name: 'Family Photos', type: 'folder', icon: 'folder' },
+            { name: 'Wallpapers', type: 'folder', icon: 'folder' }
+        ],
+        'Music': [
+            { name: 'Favorite Playlist', type: 'folder', icon: 'folder' },
+            { name: 'Summer Mix.mp3', type: 'audio', icon: 'music' },
+            { name: 'Podcast Episode.mp3', type: 'audio', icon: 'music' },
+            { name: 'Classical Collection', type: 'folder', icon: 'folder' },
+            { name: 'Voice Recordings', type: 'folder', icon: 'folder' }
+        ],
+        'Videos': [
+            { name: 'Holiday Videos', type: 'folder', icon: 'folder' },
+            { name: 'Tutorial.mp4', type: 'video', icon: 'video' },
+            { name: 'Project Presentation.mp4', type: 'video', icon: 'video' },
+            { name: 'Family Events', type: 'folder', icon: 'folder' },
+            { name: 'Screen Recordings', type: 'folder', icon: 'folder' }
+        ]
+    };
+
+    const files = filesByCategory[category] || filesByCategory['Home'];
+    
+    contentArea.innerHTML = '';
+    
+    files.forEach(file => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'folder-item';
+        itemDiv.innerHTML = `
+            <img src="${getIconUrl(file.icon)}" alt="${file.type} icon">
+            <span>${file.name}</span>
+        `;
+        
+        itemDiv.addEventListener('click', () => {
+            document.querySelectorAll('.folder-item').forEach(item => 
+                item.classList.remove('active'));
+            itemDiv.classList.add('active');
+        });
+        
+        itemDiv.addEventListener('dblclick', () => {
+            if (file.type === 'folder') {
+                updateFileExplorerContent(file.name);
+            } else {
+                openFile(file);
+            }
+        });
+        
+        itemDiv.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            showContextMenu(e.pageX, e.pageY, itemDiv);
+        });
+        
+        contentArea.appendChild(itemDiv);
+    });
+    
+    updateAddressBar(category);
+}
+
+// Update address bar icon loading
+function updateAddressBar(category) {
+    const addressBar = document.querySelector('.address-bar');
+    addressBar.innerHTML = `
+        <div class="path-segment">
+            <img src="${getIconUrl('pc')}" alt="This PC">
+            <span>This PC</span>
+        </div>
+        <span class="chevron">›</span>
+        <div class="path-segment">
+            <img src="${getIconUrl(category.toLowerCase())}" alt="${category}">
+            <span>${category}</span>
+        </div>
+    `;
+}
+
+function openWindow(windowId) {
+    const window = document.getElementById(windowId);
+    if (window) {
+        window.style.display = 'block';
+        bringToFront(window);
+        
+        const taskbarIcon = document.querySelector(`.task-icon[data-window="${windowId}"]`);
+        if (taskbarIcon) {
+            taskbarIcon.classList.add('active');
+        }
+        
+        if (windowId === 'recycleBin') {
+            updateRecycleBinContent();
+            updateRecycleBinIcon();
+        }
+    }
+}
+
+function closeWindow(windowId) {
+    const window = document.getElementById(windowId);
+    if (window) {
+        window.style.display = 'none';
+        const taskbarIcon = document.querySelector(`.task-icon[data-window="${windowId}"]`);
+        if (taskbarIcon) {
+            taskbarIcon.classList.remove('active');
+        }
+    }
+}
+
+function minimizeWindow(windowId) {
+    const window = document.getElementById(windowId);
+    if (window) {
+        window.style.display = 'none';
+    }
+}
+
+function maximizeWindow(windowId) {
+    const window = document.getElementById(windowId);
+    if (window) {
+        if (window.style.width === '100%') {
+            window.style.width = '800px';
+            window.style.height = '600px';
+            window.style.top = '50px';
+            window.style.left = '50px';
+        } else {
+            window.style.width = '100%';
+            window.style.height = 'calc(100% - 48px)';
+            window.style.top = '0';
+            window.style.left = '0';
+        }
+    }
+}
+
+document.querySelectorAll('.task-icon').forEach(icon => {
+    icon.addEventListener('click', () => {
+        const windowId = icon.getAttribute('data-window');
+        if (windowId) {
+            const window = document.getElementById(windowId);
+            if (window.style.display === 'block') {
+                window.style.display = 'none';
+                icon.classList.remove('active');
+            } else {
+                openWindow(windowId);
+                icon.classList.add('active');
+            }
+        }
+    });
+});
+
+document.querySelectorAll('.desktop-icon').forEach(icon => {
+    icon.addEventListener('click', () => {
+        const windowName = icon.querySelector('span').textContent.toLowerCase().replace(' ', '');
+        const mappings = {
+            'fileexplorer': 'fileExplorer',
+            'microsoftedge': 'edge',
+            'powerpoint': 'powerpoint',
+            'recyclebin': 'recycleBin',
+            'blackjack': 'blackjack'
+        };
+        
+        if (mappings[windowName]) {
+            openWindow(mappings[windowName]);
+        }
+    });
+});
+
+document.querySelectorAll('.app-window').forEach(makeWindowDraggable);
+
+function makeWindowDraggable(window) {
+    const header = window.querySelector('.window-header');
+    let isDragging = false;
+    let currentX;
+    let currentY;
+    let initialX;
+    let initialY;
+
+    header.addEventListener('mousedown', dragStart);
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', dragEnd);
+
+    function dragStart(e) {
+        if (e.target.closest('.window-controls')) return;
+        
+        initialX = e.clientX - window.offsetLeft;
+        initialY = e.clientY - window.offsetTop;
+        
+        if (e.target === header || e.target.parentNode === header) {
+            isDragging = true;
+            bringToFront(window);
+        }
+    }
+
+    function drag(e) {
+        if (isDragging) {
+            e.preventDefault();
+            currentX = e.clientX - initialX;
+            currentY = e.clientY - initialY;
+            
+            window.style.left = currentX + "px";
+            window.style.top = currentY + "px";
+        }
+    }
+
+    function dragEnd(e) {
+        initialX = currentX;
+        initialY = currentY;
+        isDragging = false;
+    }
+}
+
+function getCurrentPath() {
+    // Get path segments from address bar
+    const pathSegments = document.querySelectorAll('.address-bar .path-segment span');
+    let path = '';
+    
+    // Build path from segments
+    pathSegments.forEach((segment, index) => {
+        if (index > 0) {
+            path += ' > ';
+        }
+        path += segment.textContent;
+    });
+    
+    return path || 'This PC'; // Default to 'This PC' if no path found
+}
+
+function updateRecycleBinIcon() {
+    const desktopIcon = document.querySelector('.desktop-icon img[alt="Recycle Bin icon"]');
+    const taskbarIcon = document.querySelector('.task-icon img[alt="Recycle Bin"]');
+    
+    const iconState = recycleBinItems.length > 0 ? 'bin1' : 'bin0';
+    
+    if (desktopIcon) {
+        desktopIcon.src = getIconUrl(iconState);
+    }
+    
+    if (taskbarIcon) {
+        taskbarIcon.src = getIconUrl(iconState);
+    }
+}
+
+function updateRecycleBinContent() {
+    const recycleBinContent = document.querySelector('.recycling-bin-content');
+    const statusBar = document.querySelector('#recycleBin .file-explorer-status');
+    
+    if (recycleBinItems.length === 0) {
+        recycleBinContent.innerHTML = `
+            <div class="empty-bin-message">
+                <img src="${getIconUrl('bin0')}" alt="Empty Recycle Bin" style="width: 64px; height: 64px; opacity: 0.5; margin-bottom: 16px;">
+                <p style="color: #666; font-size: 14px;">Recycle Bin is empty</p>
+            </div>
+        `;
+    } else {
+        recycleBinContent.innerHTML = '';
+        recycleBinItems.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'folder-item';
+            itemDiv.innerHTML = `
+                <img src="${item.icon}" alt="Deleted file icon">
+                <span>${item.name}</span>
+            `;
+            
+            itemDiv.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                showRecycleBinContextMenu(e.pageX, e.pageY, itemDiv, item);
+            });
+            
+            recycleBinContent.appendChild(itemDiv);
+        });
+    }
+    
+    if (statusBar) {
+        statusBar.textContent = `${recycleBinItems.length} item${recycleBinItems.length !== 1 ? 's' : ''}`;
+    }
+    
+    const restoreButton = document.querySelector('#recycleBin .toolbar-button:nth-child(1)');
+    const deleteButton = document.querySelector('#recycleBin .toolbar-button:nth-child(2)');
+    const emptyBinButton = document.querySelector('#recycleBin .toolbar-button:nth-child(3)');
+    
+    const hasItems = recycleBinItems.length > 0;
+    if (restoreButton) restoreButton.style.opacity = hasItems ? '1' : '0.5';
+    if (deleteButton) deleteButton.style.opacity = hasItems ? '1' : '0.5';
+    if (emptyBinButton) emptyBinButton.style.opacity = hasItems ? '1' : '0.5';
+}
+
+function showContextMenu(x, y, element) {
+    removeContextMenu(); // Remove any existing context menus
+    
+    const menu = document.createElement('div');
+    menu.className = 'context-menu';
+    menu.style.cssText = `
+        position: fixed;
+        left: ${x}px;
+        top: ${y}px;
+        background: rgba(255, 255, 255, 0.98);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+        padding: 4px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+        min-width: 200px;
+    `;
+
+    const menuItems = [
+        { text: 'Open', icon: getIconUrl('open') },
+        { text: 'Copy', icon: getIconUrl('copy') },
+        { text: 'Cut', icon: getIconUrl('cut') },
+        { text: 'Delete', icon: getIconUrl('delete') },
+        { text: 'Rename', icon: getIconUrl('rename') },
+        { text: 'Properties', icon: getIconUrl('properties') }
+    ];
+
+    menuItems.forEach(menuItem => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'context-menu-item';
+        itemDiv.innerHTML = `
+            <img src="${menuItem.icon}" alt="${menuItem.text}">
+            ${menuItem.text}
+        `;
+        
+        itemDiv.onclick = () => {
+            handleContextMenuAction(menuItem.text, element);
+            removeContextMenu();
+        };
+        
+        menu.appendChild(itemDiv);
+    });
+
+    document.body.appendChild(menu);
+    document.addEventListener('click', removeContextMenu);
+}
+
+function removeContextMenu() {
+    const existingMenu = document.querySelector('.context-menu');
+    if (existingMenu) {
+        existingMenu.remove();
+    }
+    document.removeEventListener('click', removeContextMenu);
+}
+
+function handleContextMenuAction(action, element) {
+    const fileName = element.querySelector('span').textContent;
+    const fileIcon = element.querySelector('img').src;
+    
+    switch(action) {
+        case 'Open':
+            // Open the file or folder
+            alert('Opening: ' + fileName);
+            break;
+        case 'Copy':
+            // Copy logic here
+            alert('Copying: ' + fileName);
+            break;
+        case 'Cut':
+            // Cut logic here
+            alert('Cutting: ' + fileName);
+            break;
+        case 'Delete':
+            const currentPath = getCurrentPath();
+            recycleBinItems.push({
+                name: fileName,
+                icon: fileIcon,
+                originalLocation: currentPath,
+                deletedDate: new Date(),
+                size: '24.5 KB' // This could be dynamic in a real implementation
+            });
+            
+            element.remove();
+            updateRecycleBinContent();
+            updateRecycleBinIcon(); // Update icon after deleting
+            break;
+        case 'Rename':
+            // Rename logic here
+            alert('Renaming: ' + fileName);
+            break;
+        case 'Properties':
+            showPropertiesDialog(fileName, fileIcon);
+            break;
+    }
+}
+
+function showPropertiesDialog(fileName, fileIcon) {
+    const propertiesWindow = document.createElement('div');
+    propertiesWindow.className = 'app-window properties-dialog';
+    propertiesWindow.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        z-index: 10000;
+    `;
+    
+    propertiesWindow.innerHTML = `
+        <div class="window-header">
+            <div class="window-title">
+                <img src="${fileIcon}" alt="File icon" style="width: 20px; height: 20px;">
+                <span>${fileName} Properties</span>
+            </div>
+            <div class="window-controls">
+                <div class="window-button close-button" onclick="this.parentElement.parentElement.parentElement.remove()">✕</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <p><strong>File Name:</strong> ${fileName}</p>
+            <p><strong>Size:</strong> 24.5 KB</p>
+            <p><strong>Date Created:</strong> ${new Date().toLocaleDateString()}</p>
+        </div>
+    `;
+    
+    document.body.appendChild(propertiesWindow);
+    makeWindowDraggable(propertiesWindow);
+}
+
+function buildDeck() {
+    let values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+    let suits = ["♠", "♣", "♥", "♦"];
+    deck = [];
+
+    for (let suit of suits) {
+        for (let value of values) {
+            deck.push({ value: value, suit: suit });
+        }
+    }
+}
+
+function shuffleDeck() {
+    for (let i = deck.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [deck[i], deck[j]] = [deck[j], deck[i]];
+    }
+}
+
+function startGame() {
+    if (currentBet === 0) {
+        document.getElementById('status-message').innerText = "Please place a bet first!";
+        return;
+    }
+
+    buildDeck();
+    shuffleDeck();
+    
+    dealerSum = 0;
+    playerSum = 0;
+    dealerAceCount = 0;
+    playerAceCount = 0;
+    hidden = deck.pop();
+    
+    document.getElementById('dealer-cards').innerHTML = '';
+    document.getElementById('player-cards').innerHTML = '';
+    
+    let hiddenCard = document.createElement('div');
+    hiddenCard.className = 'card';
+    hiddenCard.id = 'hidden-card';
+    hiddenCard.innerText = '🂠';
+    document.getElementById('dealer-cards').appendChild(hiddenCard);
+    
+    dealerSum += getValue(hidden);
+    if (hidden.value === "A") dealerAceCount += 1;
+    
+    let card = deck.pop();
+    dealerSum += getValue(card);
+    if (card.value === "A") dealerAceCount += 1;
+    addCard(card, 'dealer-cards');
+    
+    for (let i = 0; i < 2; i++) {
+        card = deck.pop();
+        playerSum += getValue(card);
+        if (card.value === "A") playerAceCount += 1;
+        addCard(card, 'player-cards');
+    }
+    
+    document.getElementById('dealer-sum').innerText = getValue(card);
+    document.getElementById('player-sum').innerText = playerSum;
+    
+    canHit = true;
+    document.getElementById('hit-button').disabled = false;
+    document.getElementById('stand-button').disabled = false;
+    document.getElementById('deal-button').disabled = true;
+    document.getElementById('place-bet').disabled = true;
+}
+
+function getValue(card) {
+    if (card.value === "A") return 11;
+    if (["K", "Q", "J"].includes(card.value)) return 10;
+    return parseInt(card.value);
+}
+
+function addCard(card, containerId) {
+    let cardDiv = document.createElement('div');
+    cardDiv.className = 'card' + (["♥", "♦"].includes(card.suit) ? ' red' : '');
+    cardDiv.innerText = card.value + card.suit;
+    document.getElementById(containerId).appendChild(cardDiv);
+}
+
+function hit() {
+    if (!canHit) return;
+    
+    let card = deck.pop();
+    playerSum += getValue(card);
+    if (card.value === "A") playerAceCount += 1;
+    addCard(card, 'player-cards');
+    
+    if (reduceAce(playerSum, playerAceCount) > 21) {
+        canHit = false;
+        document.getElementById('hit-button').disabled = true;
+        stand();
+    }
+    
+    document.getElementById('player-sum').innerText = playerSum;
+}
+
+function stand() {
+    document.getElementById('hidden-card').innerText = hidden.value + hidden.suit;
+    if (["♥", "♦"].includes(hidden.suit)) {
+        document.getElementById('hidden-card').classList.add('red');
+    }
+    
+    while (dealerSum < 17) {
+        let card = deck.pop();
+        dealerSum += getValue(card);
+        if (card.value === "A") dealerAceCount += 1;
+        addCard(card, 'dealer-cards');
+    }
+    
+    dealerSum = reduceAce(dealerSum, dealerAceCount);
+    playerSum = reduceAce(playerSum, playerAceCount);
+    
+    canHit = false;
+    document.getElementById('dealer-sum').innerText = dealerSum;
+    document.getElementById('hit-button').disabled = true;
+    document.getElementById('stand-button').disabled = true;
+    
+    let message = "";
+    if (playerSum > 21) {
+        message = "You Lose!";
+        playerMoney -= currentBet;
+    }
+    else if (dealerSum > 21) {
+        message = "You Win!";
+        playerMoney += currentBet;
+    }
+    else if (playerSum === dealerSum) {
+        message = "Tie!";
+    }
+    else if (playerSum > dealerSum) {
+        message = "You Win!";
+        playerMoney += currentBet;
+    }
+    else {
+        message = "You Lose!";
+        playerMoney -= currentBet;
+    }
+    
+    document.getElementById('status-message').innerText = message;
+    document.getElementById('player-money').innerText = playerMoney;
+    document.getElementById('deal-button').disabled = false;
+    document.getElementById('place-bet').disabled = false;
+    currentBet = 0;
+}
+
+function reduceAce(sum, aceCount) {
+    while (sum > 21 && aceCount > 0) {
+        sum -= 10;
+        aceCount -= 1;
+    }
+    return sum;
+}
+
+function placeBet() {
+    let betAmount = parseInt(document.getElementById('bet-amount').value);
+    if (betAmount > playerMoney) {
+        document.getElementById('status-message').innerText = "Not enough money!";
+        return;
+    }
+    if (betAmount < 10) {
+        document.getElementById('status-message').innerText = "Minimum bet is $10!";
+        return;
+    }
+    currentBet = betAmount;
+    document.getElementById('status-message').innerText = `Bet placed: $${betAmount}`;
+}
+    </script>
+</body></html>
